@@ -1,0 +1,62 @@
+NOSQL的使用场景：
+	1.对数据的高并发操作
+	2.海量数据的独写
+	3.对数据的高可扩展性
+
+Redis：
+	默认端口：6379
+	基于key-value存储
+	redis默认有16个库，初始默认为0号库，可以使用select 库号来切换数据库，每个库的密码相同
+	单线程+多路IO复用，支持多数据类型，支持持久化
+
+Redis中常用的五大基本数据类型：
+	1.String（Redis字符串）
+	2.List（Redis列表）
+	3.Set（Redis集合）
+	4.Hash（Redis哈希）
+	5.Zset（Redis有序集合）
+
+Redis中键的操作：
+	keys * 查看当前库的所有key
+	exists key 判断某个key是否存在
+	type key 查看key的类型
+	del key 删除指定key数据
+	unlink key 根据value选择非阻塞删除，仅将key从keyspace元数据中删除，真正的删除会在后续异步操作
+	expire key 时间 为给定的可以设置过期时间
+	ttl key 查看还有多少秒过期，-1代表永不过期，-2表示已过期
+
+	select 命令切换数据库
+	dbsize 查看当前数据库的key数量
+	flushdb 清空当前库
+	flushall 通杀全部库
+
+Redis字符串（String）
+	String是Redis最基本的类型。一个Redis中字符串value最多可以是512M
+	String类型是二进制安全的，意味着Redis的String可以包含任何数据，比如jpg图片或者序列化的对象
+
+	常用命令：
+	set key value：添加键值对
+	get key：查询对应键值
+	append key value：将给定的value追加到原值的末尾
+	strlen key：获得值的长度
+	setnx key value：只有在key不存在时，才会设置key值，key值存在时不会对原有值进行覆盖，而是不进行操作
+
+	incr key：将key中存储的数字值加1，只能对数字值操作，如果为空，新增值为1
+	decr key：将key中存储的数字值减1，只能对数字值操作，如果为空，新增值为-1
+	incrby/decrby key 步长：将key中存储的数字值增减自定义步长
+
+	Redis操作是原子性操作，所谓原子性操作是指不会被线程调度机制所打断。这种操作一旦开始，就会一直运行到结束，中间不会切换到任何其他线程
+	在单线程中，能够在单条指令中完成的操作都可以认为是原子操作，因为中断只能发生在指令之间
+	在多线程中，不能被其他进程打断的操作叫做原子操作，
+	Redis单命令的原子性主要得益于Redis的单线程
+
+	mset key1 value1 key2 value2 。。。：同时设置一个或多个键值对
+	mget key1 key2 。。。：同时获取一个或多个value
+	msetnx key1 value1 key2 value2。。。：同时设置一个或多个键值对，当且仅当所有给定key都不存在
+	由于原子性的原因，有一个失败则都失败
+
+	getrange key 起始位置 结束位置：获得值的范围，类似Java中的substring，前包，后包
+	setrange key 替换位置 value：用value覆写key所存储的字符串信息，从起始位置开始（索引从0开始）
+
+	setex key 过期时间 value：设置键值的同时，设置过期时间，单位秒
+	getset key value：以新换旧，设置新值的同时获得旧值
