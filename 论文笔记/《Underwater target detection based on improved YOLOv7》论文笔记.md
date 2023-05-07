@@ -67,7 +67,7 @@ YOLOv7由4个不同的模块组成：<font color='orange'>输入模块，骨干�
 
 YOLOv7原始网络模型结构如下图所示：
 
-![image-20230218140001623](F:\Learning_notes\论文笔记\image-20230218140001623.png)
+![image-20230218140001623](image-20230218140001623.png)
 
 <font color='orange'>输入模块</font>：YOLOv7模型的预处理阶段采用拼接和混合数据增强技术，利用YOLOv5建立的自适应锚选框计算方法，保证输入的彩色图像均匀缩放到$640*640$大小，从而满足骨干网络输入大小的要求。
 
@@ -83,39 +83,39 @@ YOLOv7原始网络模型结构如下图所示：
 
 <font color='red'><font color='orange'>GAM</font>可以通过减少信息分散和放大全局交互表示来提高深度神将网络的性能</font>。该模块结构如下图所示：
 
-![image-20230218170253329](F:\Learning_notes\论文笔记\image-20230218170253329.png)
+![image-20230218170253329](image-20230218170253329.png)
 
 GAM包括<font color='orange'>通道注意子模块</font>和<font color='orange'>空间注意子模块</font>。
 
 <font color='orange'>通道注意子模块</font>被<font color='sky blue'>设计为三维变换，使其能够保留输入的三维信息。然后是两层的多层感知（multilayer perception，MLP），其作用是放大通道空间中的维度间依赖性，从而使网络能够聚焦于图像中更有意义和前景的区域</font>。如下图所示：
 
-![image-20230218191651428](F:\Learning_notes\论文笔记\image-20230218191651428.png)
+![image-20230218191651428](image-20230218191651428.png)
 
 <font color='orange'>空间注意子模块</font>包含了<font color='sky blue'>两个卷积层，以有效的整合空间信息，使网络能够集中在图像中上下文重要的区域</font>，如下图所示：
 
-![image-20230218192238384](F:\Learning_notes\论文笔记\image-20230218192238384.png)
+![image-20230218192238384](image-20230218192238384.png)
 
 ### ACmix
 
 <font color='orange'>自注意力机制</font>和<font color='orange'>卷积</font>都严重依赖于$1*1$卷积运算，而<font color='orange'>ACmix</font>很好的<font color='red'>结合了自注意力机制和卷积，并且拥有很小的计算开销</font>。输出结果为：$F_{out}=\alpha*F_{attention}+\beta*F_{conv}$。结构如下图所示：
 
-![image-20230218204543038](F:\Learning_notes\论文笔记\image-20230218204543038.png)
+![image-20230218204543038](image-20230218204543038.png)
 
 ### ResNet-ACmix
 
 在YOLOv7的骨干网络中<font color='red'>引入ResNet-ACmix模块，有效的保持了提取特征信息的一致性</font>。该模块基于ResNet的结构，<font color='sky blue'>使用ACmix模块取代原$3*3$卷积，可以自适应聚焦不同的区域，捕捉更多信息的特征</font>。如下图所示，<font color='sky blue'>将输入分为主输入和剩余输入，避免了信息的丢失，同时减少了参数数量和计算需求</font>。<font color='red'>ResNet-ACmix模块可以使网络获得更深的深度，而不会遇到梯度消失，学习结果对网络权值的波动更敏感</font>。
 
-![image-20230218210414429](F:\Learning_notes\论文笔记\image-20230218210414429.png)
+![image-20230218210414429](image-20230218210414429.png)
 
 ### AC-E-ELAN
 
 与传统的ELAN网络不同，<font color='orange'>E-ELAN网络</font>采用了一种expand，shuffle和merge cardinallity方法，这种方法<font color='red'>能够在不破坏原始梯度流的情况下不断增强网络的学习能力，从而提高参数利用率和计算效率</font>。将<font color='orange'>RepVGG架构中的残差结构（即$1*1$卷积分制和跳跃连接分支）纳入其中</font>。该结构集成了ACmix模块，由$3*3$卷积块组成。这种组合使网络<font color='red'>既能从多分支模型的训练中获得丰富的特征，又能从单路径模型中获得快速、内存高效的推理</font>。
 
-![image-20230218210827669](F:\Learning_notes\论文笔记\image-20230218210827669.png)
+![image-20230218210827669](image-20230218210827669.png)
 
 <font color='pink'>改进后的YOLOv7网络结构</font>：
 
-![image-20230218205548216](F:\Learning_notes\论文笔记\image-20230218205548216.png)
+![image-20230218205548216](image-20230218205548216.png)
 
 引入<font color='orange'>AC-E-ELAN结构</font>，<font color='red'>增强了模型关注输入图像样本有价值的内容和位置的能力，丰富了网络提取的特征，减少了模型的推理时间</font>。
 
